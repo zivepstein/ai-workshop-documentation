@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Public AI Summit AI & Creativity Workshop Documenation</title>
+  <style>
+    body, html {
+      margin: 0;
+      height: 100%;
+    }
+
+    /* ✅ Flex container for layout */
+    #container {
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    canvas {
+      background: black; /* ✅ Set canvas background to black */
+      display: block;
+      cursor: pointer;
+    }
+
+    /* ✅ Description panel styles */
+    #description {
+      width: 500px;
+      background-color: white;
+      color:black;
+      padding: 20px;
+      font-family: sans-serif;
+      box-sizing: border-box;
+      overflow-y: auto;
+    }
+
+    #tooltip {
+      position: absolute;
+      background-color: rgba(0, 0, 0, 0.7);
+      color: white;
+      padding: 5px 10px;
+      border-radius: 4px;
+      pointer-events: none;
+      font-size: 14px;
+      display: none;
+      z-index: 10;
+    }
+  </style>
+</head>
+<body>
+  <!-- ✅ Flex container -->
+  <div id="container">
+    <canvas id="myCanvas" width="1000" height="800"></canvas>
+
+    <!-- ✅ Description panel -->
+    <div id="description">
+      <h2>Public AI Summit AI & Creativity Workshop Recap</h2>
+      <p>The introduction of generative AI technologies has the potential to transform creative production by allowing for the rapid creation of media objects with little human input.  But if aspects of production can be automated, will “machine creativity” lead to a decline in content diversity?  In this workshop, we overviewed the harms of the creative use of AI, such as bias and homogenization, and shared practical techniques to re-imagine AI as "a serendipity machine” that supports divergent creativity.</p>
+      <p>As a part of the workshop, participants used Stable Diffusion to generate images as a way to probe the inherent biases and homogeneities of the system. This interactive webapp shows the XX images generated over the two workshop instantiations. The images are displayed in the 2D using UMAP projections of CLIP embeddings. Zoom and drag to explore the space and hover over images to read participant descriptions. </p>
+      <p>Links: <ol><li><a href = "https://docs.google.com/presentation/d/12hO2yG5Ug4CTkOb2wd_KNVAPq6V7KVrj4PZE0H_G5FY/edit?usp=sharing">Slide deck</a></li>
+        <li><a href = "https://web.media.mit.edu/~zive/asogai.pdf">Art and the science of generative AI</a></li>
+        <li><a href = "https://hdsr.mitpress.mit.edu/pub/x5yq8vmk/release/1">The Art of Randomness: Sampling and Chance in the Age of Algorithmic Reproduction</a></li>
+        <li><a href = "https://journals.sagepub.com/doi/10.1177/13675494251351223">AI Séance: Recounts from designing artificial intelligence for transcendence, interpretive lenses and chance
+        </a></li>
+    </ol></p>
+
+    </div>
+  </div>
+
+  <div id="tooltip"></div>
+
+  <!-- Scripts (unchanged) -->
+  <script>
+    const imageData = [
+      {
+        image_url: "https://upload.wikimedia.org/wikipedia/commons/0/0e/Golden_foofa.jpg?20231006201736",
+        description: "Placeholder 1",
+        x: 0,
+        y: 0
+      },
+      {
+        image_url: "https://upload.wikimedia.org/wikipedia/commons/0/0e/Golden_foofa.jpg?20231006201736",
+        description: "Placeholder 2",
+        x: 300,
+        y: 250
+      },
+      {
+        image_url: "https://upload.wikimedia.org/wikipedia/commons/0/0e/Golden_foofa.jpg?20231006201736",
+        description: "Placeholder 3",
+        x: 500,
+        y: 100
+      }
+    ];
+
+    const canvas = document.getElementById('myCanvas');
+    const ctx = canvas.getContext('2d');
+    const tooltip = document.getElementById('tooltip');
+
+    let images = [];
+    let scale = 1;
+    let offsetX = 0;
+    let offsetY = 0;
+    let isDragging = false;
+    let dragStart = { x: 0, y: 0 };
+    let HEIGHT = 100;
+    let WIDTH = 100;
+
+    const loadPromises = imageData.map(item => {
+      return new Promise(resolve => {
+        const img = new Image();
+        img.src = item.image_url;
+        img.onload = () => {
+          images.push({ ...item, img, width: WIDTH, height: HEIGHT });
+          resolve();
+        };
+      });
+    });
+
+    Promise.all(loadPromises).then(() => {
+      draw();
+    });
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.save();
+      ctx.translate(offsetX, offsetY);
+      ctx.scale(scale, scale);
+
+      images.forEach(obj => {
+        ctx.drawImage(obj.img, obj.x, obj.y, HEIGHT, WIDTH);
+      });
+
+      ctx.restore();
+    }
+
+    canvas.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      const mouseX = e.offsetX;
+      const mouseY = e.offsetY;
+
+      const worldX = (mouseX - offsetX) / scale;
+      const worldY = (mouseY - offsetY) / scale;
+
+      const zoom = e.deltaY < 0 ? 1.1 : 0.9;
+      scale *= zoom;
+
+      offsetX = mouseX - worldX * scale;
+      offsetY = mouseY - worldY * scale;
+
+      draw();
+    });
+
+    canvas.addEventListener('mousedown', (e) => {
+      isDragging = true;
+      dragStart = { x: e.clientX, y: e.clientY };
+    });
+
+    canvas.addEventListener('mouseup', () => {
+      isDragging = false;
+    });
+
+    canvas.addEventListener('mousemove', (e) => {
+      if (isDragging) {
+        const dx = e.clientX - dragStart.x;
+        const dy = e.clientY - dragStart.y;
+        offsetX += dx;
+        offsetY += dy;
+        dragStart = { x: e.clientX, y: e.clientY };
+        draw();
+      }
+
+      const mouseX = (e.offsetX - offsetX) / scale;
+      const mouseY = (e.offsetY - offsetY) / scale;
+
+      let hovered = null;
+      for (let obj of images) {
+        if (
+          mouseX >= obj.x && mouseX <= obj.x + obj.width &&
+          mouseY >= obj.y && mouseY <= obj.y + obj.height
+        ) {
+          hovered = obj;
+          break;
+        }
+      }
+
+      if (hovered) {
+        tooltip.style.display = 'block';
+        tooltip.style.left = `${e.pageX + 10}px`;
+        tooltip.style.top = `${e.pageY + 10}px`;
+        tooltip.textContent = hovered.description;
+      } else {
+        tooltip.style.display = 'none';
+      }
+    });
+  </script>
+</body>
+</html>
