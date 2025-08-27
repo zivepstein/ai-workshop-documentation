@@ -33,6 +33,8 @@
       overflow-y: auto;
     }
 
+    
+
     #tooltip {
       position: absolute;
       background-color: rgba(0, 0, 0, 0.7);
@@ -45,25 +47,105 @@
       z-index: 10;
     }
   </style>
+  <style>
+    :root {
+      --note-bg: #fffdf7;
+      --note-border: #e6dfc8;
+      --note-accent: #c8b27a;
+      --note-text: #3a372f;
+      --note-shadow: rgba(0,0,0,0.08);
+    }
+  
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --note-bg: #1a1916;
+        --note-border: #3a3425;
+        --note-accent: #8f7b46;
+        --note-text: #e9e5dc;
+        --note-shadow: rgba(0,0,0,0.35);
+      }
+    }
+  
+    #description {
+      padding: 0.5rem;
+    }
+  
+    /* the note */
+    #description-text {
+      position: relative;
+      max-width: 42rem;
+      line-height: 1.55;
+      font-size: 0.95rem;
+      color: var(--note-text);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.4), rgba(0,0,0,0)) 0 0/100% 24px no-repeat,
+        radial-gradient(90% 50% at 50% 0%, rgba(0,0,0,0.06), transparent 55%) top/100% 14px no-repeat,
+        var(--note-bg);
+      border: 1px solid var(--note-border);
+      border-radius: 12px;
+      padding: 1rem 1.1rem 1.1rem 1.1rem;
+      box-shadow:
+        0 10px 18px -10px var(--note-shadow),
+        0 1px 0 0 rgba(255,255,255,0.4) inset;
+      transition: transform 160ms ease, box-shadow 160ms ease;
+    }
+  
+    
+    /* a gentle lift on hover/focus (keyboard accessible) */
+    #description-text:hover,
+    #description-text:focus-within {
+      transform: translateY(-2px);
+      box-shadow:
+        0 14px 22px -12px var(--note-shadow),
+        0 1px 0 0 rgba(255,255,255,0.4) inset;
+    }
+  
+    /* make links inside note look nice if you ever add them */
+    #description-text a {
+      color: inherit;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+  
+    /* motion-safe */
+    @media (prefers-reduced-motion: reduce) {
+      #description-text {
+        transition: none;
+      }
+    }
+  </style>
 </head>
 <body>
   <!-- ✅ Flex container -->
+
+  
   <div id="container">
-    <canvas id="myCanvas" width="1000" height="800"></canvas>
+    
 
     <!-- ✅ Description panel -->
     <div id="description">
-      <h2>Public AI Summit AI & Creativity Workshop Recap</h2>
-      <p>The introduction of generative AI technologies has the potential to transform creative production by allowing for the rapid creation of media objects with little human input.  But if aspects of production can be automated, will “machine creativity” lead to a decline in content diversity?  In this workshop, we overviewed the harms of the creative use of AI, such as bias and homogenization, and shared practical techniques to re-imagine AI as "a serendipity machine” that supports divergent creativity.</p>
-      <p>As a part of the workshop, participants used Stable Diffusion to generate images as a way to probe the inherent biases and homogeneities of the system. This interactive webapp shows the XX images generated over the two workshop instantiations. The images are displayed in the 2D using UMAP projections of CLIP embeddings. Zoom and drag to explore the space and hover over images to read participant descriptions. </p>
-      <p>Links: <ol><li><a href = "https://docs.google.com/presentation/d/12hO2yG5Ug4CTkOb2wd_KNVAPq6V7KVrj4PZE0H_G5FY/edit?usp=sharing">Slide deck</a></li>
-        <li><a href = "https://web.media.mit.edu/~zive/asogai.pdf">Art and the science of generative AI</a></li>
-        <li><a href = "https://hdsr.mitpress.mit.edu/pub/x5yq8vmk/release/1">The Art of Randomness: Sampling and Chance in the Age of Algorithmic Reproduction</a></li>
-        <li><a href = "https://journals.sagepub.com/doi/10.1177/13675494251351223">AI Séance: Recounts from designing artificial intelligence for transcendence, interpretive lenses and chance
+      <h1>Public AI Summit AI & Creativity Workshop Recap</h1>
+      <h4>Overview</h4>
+      <p>The introduction of generative AI technologies has the potential to transform creative production by allowing for the rapid creation of media objects with little human input.  But if aspects of production can be automated, will “machine creativity” lead to a decline in content diversity?  In this workshop, we overviewed the harms of the creative use of AI, such as bias and homogenization, and shared practical techniques to re-imagine AI as "a serendipity machine” that supports divergent creativity. See <a target="_blank" href = "https://docs.google.com/presentation/d/12hO2yG5Ug4CTkOb2wd_KNVAPq6V7KVrj4PZE0H_G5FY/edit?usp=sharing">the slide deck</a> for materials.</p>
+      <h4>About this page</h4>
+      <p>As a part of the workshop, participants used Stable Diffusion to generate images as a way to probe the inherent biases and homogeneities of the system. This interactive webapp shows the 55 images generated over the two workshop instantiations. The images are plotted in a 2D "latent space" using UMAP projections of CLIP embeddings. Zoom and drag to explore the space and hover over images to read image prompts. </p>
+      <p>
+        <div id="description-text">
+          Hover over an image to see the comments from the participant!
+      </div>
+      <h4>Citizen science of AI-imagery "latent space"</h4>
+      <p>We need to harness <a href = "">public intelligence</a> to steer AI systems towards ethical uses. An important part of that is crowdsourcing critique and understanding of AI generated images, which can help us understand the underlying biases and homogeneity that exists in these generators. For example, we discovered that images of barracudas often contain humans holding up a prized fish, reflecrting a latent human cultural practice that has implications of AI-imagery (see slide 6 of the <a target="_blank" href = "https://docs.google.com/presentation/d/12hO2yG5Ug4CTkOb2wd_KNVAPq6V7KVrj4PZE0H_G5FY/edit?usp=sharing">slide deck</a> or <a target="_blank" href = "https://en.wikipedia.org/wiki/Ganimal#The_Barracuda_Effect
+        ">The Barracuda Effect</a> on Wikipedia).If you want to help with the citizen science of exploring this latent space, get in touch or check back for a interaction way to add images to the map. <span style = "display:none">If you want to help with the citizen science of exploring this latent space, contribute to this crowdsourced map of imagery here: <a target="_blank" href ="">LINK CURRENTLY BROKEN</a></span></p>
+    </p>
+      <p>Links and resources: <ol><li><a target="_blank" href = "https://docs.google.com/presentation/d/12hO2yG5Ug4CTkOb2wd_KNVAPq6V7KVrj4PZE0H_G5FY/edit?usp=sharing">Slide deck</a></li>
+        <li><a target="_blank" href = "https://web.media.mit.edu/~zive/asogai.pdf">Art and the science of generative AI</a></li>
+        <li><a target="_blank" href = "https://hdsr.mitpress.mit.edu/pub/x5yq8vmk/release/1">The Art of Randomness: Sampling and Chance in the Age of Algorithmic Reproduction</a></li>
+        <li><a target="_blank" href = "https://journals.sagepub.com/doi/10.1177/13675494251351223">AI Séance: Recounts from designing artificial intelligence for transcendence, interpretive lenses and chance
         </a></li>
     </ol></p>
 
     </div>
+    <canvas id="myCanvas" width="1000" height="800"></canvas>
   </div>
 
   <div id="tooltip"></div>
@@ -73,184 +155,383 @@
     const imageData = [
   {
     image_url: "https://www.zive.info/ai-workshop-documentation/assets/A_03.jpg",
-    description: "Prompt: Image of an album cover from a 1980s new wave band, done in the style of Patrick Nagel",
+    description: "Placeholder",
+    prompt: "Image of an album cover from a 1980s new wave band…whose members are mix race with mix gender…with 1980s hairstyles and clothing",
     x: 382.9254,
     y: 883.3567
   },
   {
     image_url: "https://www.zive.info/ai-workshop-documentation/assets/A_04.jpg",
-    description: "Prompt: Image of an album cover from a 1980s new wave band, done in the style of Patrick Nagel",
+    description: "Placeholder",
+    prompt: "Image of an album cover from a 1980s new wave band…whose members are mix race with mix gender…with 1980s hairstyles and clothing",
     x: 323.5314,
     y: 817.6335
   },
   {
     image_url: "https://www.zive.info/ai-workshop-documentation/assets/A_05.jpg",
-    description: "Prompt: Image of an album cover from a 1980s new wave band, done in the style of Patrick Nagel",
+    description: "Placeholder",
+    prompt: "Image of an album cover from a 1980s new wave band…whose members are mix race with mix gender…with 1980s hairstyles and clothing",
     x: 411.56735,
     y: 845.75757
   },
   {
     image_url: "https://www.zive.info/ai-workshop-documentation/assets/A_06.jpg",
-    description: "Prompt: Image of an album cover from a 1980s new wave band, done in the style of Patrick Nagel",
+    description: "Placeholder",
+    prompt: "Image of an album cover from a 1980s new wave band…whose members are mix race with mix gender…with 1980s hairstyles and clothing",
     x: 413.96353,
     y: 922.154
   },
   {
     image_url: "https://www.zive.info/ai-workshop-documentation/assets/A_08.jpg",
-    description: "Participant comments: Meant to be different species of cephalopods in a room, like a gathering of octopus and squid.",
+    description: "Meant to be different species of cephalopods in a rock band, in a coffee shop. Where’s the drummer? I didn’t ask for anthropomorphic interpretation.",
+    prompt: "",
     x: 625.32275,
     y: 916.50934
   },
   {
     image_url: "https://www.zive.info/ai-workshop-documentation/assets/A_09.jpg",
-    description: "Participant comments: The image is super creepy but also interesting",
-    x: 600.12345,
-    y: 905.67891
+    description: "Meant to be a synthesis of album cover from early Yes, and later Pink Floyd–  came out as an a sadly unsuccessful  attempt at being cliche (see the actual Floyd cover below) and no Yes!",
+    prompt: "",
+    x: 481.1242,
+    y: 636.11475
   },
   {
-    image_url: "https://www.zive.info/ai-workshop-documentation/assets/A_10.jpg",
-    description: "Prompt: Image of a cyberpunk city skyline at night. Participant comments: Colors are vibrant and futuristic.",
-    x: 512.44532,
-    y: 812.33456
+    image_url: "https://www.zive.info/ai-workshop-documentation/assets/A_10.png",
+    description: "Meant to be a synthesis of album cover from early Yes, and later Pink Floyd–  came out as an a sadly unsuccessful  attempt at being cliche (see the actual Floyd cover below) and no Yes!",
+    prompt: "",
+    x: 513.1017,
+    y: 784.9485
   },
   {
     image_url: "https://www.zive.info/ai-workshop-documentation/assets/A_11.jpg",
-    description: "Prompt: Image of a cyberpunk city skyline at night",
-    x: 498.22314,
-    y: 800.66444
+    description: "Placeholder",
+    prompt: "Create me an image of a futuristic building that could not plausibly exist given the laws of physics. Make it fantastically, absurdly futuristic.",
+    x: 693.4854,
+    y: 368.33038
   },
   {
     image_url: "https://www.zive.info/ai-workshop-documentation/assets/A_12.jpg",
-    description: "Prompt: Image of a cyberpunk city skyline at night",
-    x: 545.90877,
-    y: 820.76543
+    description: "Placeholder",
+    prompt: "Generate me an image of a flowering plant that does not exist, but looks incredibly realistic. The accent colors of the flower are neon orange and pink. It is rooted on the floor of the ocean.",
+    x: 872.6193,
+    y: 556.17737
   },
   {
-    image_url: "https://www.zive.info/ai-workshop-documentation/assets/A_13.jpg",
-    description: "Participant comments: This feels less relevant to the topic, but visually appealing",
-    x: 533.22411,
-    y: 832.22901
-  }
-  {
-    image_url: "https://www.zive.info/ai-workshop-documentation/assets/A_14.jpg",
-    description: "Prompt: Abstract geometric shapes in neon colors",
-    x: 562.11234,
-    y: 845.99812
+    image_url: "https://www.zive.info/ai-workshop-documentation/assets/A_13.png",
+    description: "This shows a blue cybernetic sculpture in front of a harvard academic building. The blue circuit brain is a standard trope for AI that anthropomorphizes AI with human features",
+    prompt: "",
+    x: 679.34784,
+    y: 230.10008
   },
   {
-    image_url: "https://www.zive.info/ai-workshop-documentation/assets/A_15.jpg",
-    description: "Prompt: Abstract geometric shapes in neon colors. Participant comments: This one is my favorite, feels very 80s retro",
-    x: 575.44221,
-    y: 860.55671
+    image_url: "https://www.zive.info/ai-workshop-documentation/assets/A_14.png",
+    description: "The first image was generic and very homogenous to what everyone else produced",
+    prompt: "",
+    x: 571.1367,
+    y: 110.5972
   },
   {
-    image_url: "https://www.zive.info/ai-workshop-documentation/assets/A_16.jpg",
-    description: "Prompt: Abstract geometric shapes in neon colors",
-    x: 590.99112,
-    y: 870.11023
+    image_url: "https://www.zive.info/ai-workshop-documentation/assets/A_15.png",
+    description: "The second image looks exactly how I would expect",
+    prompt: "",
+    x: 22.212814,
+    y: 241.94543
   },
   {
-    image_url: "https://www.zive.info/ai-workshop-documentation/assets/A_17.jpg",
-    description: "Participant comments: A little too chaotic, but interesting composition",
-    x: 605.22211,
-    y: 885.90877
+    image_url: "https://www.zive.info/ai-workshop-documentation/assets/A_16.png",
+    description: "The album cover looks like a Coldplay album",
+    prompt: "",
+    x: 546.7399,
+    y: 426.59314
   },
   {
-    image_url: "https://www.zive.info/ai-workshop-documentation/assets/A_18.jpg",
-    description: "Prompt: Surreal desert landscape with giant floating crystals",
-    x: 618.11452,
-    y: 890.44231
+    image_url: "https://www.zive.info/ai-workshop-documentation/assets/A_17.png",
+    description: "Placeholder",
+    prompt: "",
+    x: 525.432,
+    y: 535.1663
   },
   {
-    image_url: "https://www.zive.info/ai-workshop-documentation/assets/A_19.jpg",
-    description: "Prompt: Surreal desert landscape with giant floating crystals. Participant comments: This feels like a dream sequence",
-    x: 628.22344,
-    y: 900.11235
+    image_url: "https://www.zive.info/ai-workshop-documentation/assets/A_18.png",
+    description: "(defaults as male)",
+    prompt: "A CEO giving a speech at a technology conference.",
+    x: 290.94833,
+    y: 0.0
   },
   {
-    image_url: "https://www.zive.info/ai-workshop-documentation/assets/A_20.jpg",
-    description: "Prompt: Surreal desert landscape with giant floating crystals",
-    x: 640.55612,
-    y: 912.44921
+    image_url: "https://www.zive.info/ai-workshop-documentation/assets/A_19.png",
+    description: "(why does this default to a Mary Kay-type representative?)",
+    prompt: "A female CEO giving a speech at a technology conference.",
+    x: 256.8128,
+    y: 38.487865
   },
   {
-    image_url: "https://www.zive.info/ai-workshop-documentation/assets/A_21.jpg",
-    description: "Participant comments: Stunning colors, could be a cover for a fantasy novel",
-    x: 652.33419,
-    y: 922.11834
+    image_url: "https://www.zive.info/ai-workshop-documentation/assets/A_20.png",
+    description: "Placeholder",
+    prompt: "A Black CEO giving a speech at a technology conference.",
+    x: 140.9956,
+    y: 116.136604
   },
   {
-    image_url: "https://www.zive.info/ai-workshop-documentation/assets/A_22.jpg",
-    description: "Prompt: Portrait of a futuristic astronaut in neon lighting",
-    x: 665.77523,
-    y: 935.66712
+    image_url: "https://www.zive.info/ai-workshop-documentation/assets/A_21.png",
+    description: "(again, white and male)",
+    prompt: "A smart CEO giving a speech at a technology conference.",
+    x: 200.03615,
+    y: 83.89742
   },
   {
-    image_url: "https://www.zive.info/ai-workshop-documentation/assets/A_23.jpg",
-    description: "Prompt: Portrait of a futuristic astronaut in neon lighting. Participant comments: Looks cinematic, like a movie poster",
-    x: 678.99845,
-    y: 948.33455
-  }
-  {
-    image_url: "https://www.zive.info/ai-workshop-documentation/assets/A_24.jpg",
-    description: "Prompt: Portrait of a futuristic astronaut in neon lighting",
-    x: 690.44231,
-    y: 960.11221
+    image_url: "https://www.zive.info/ai-workshop-documentation/assets/A_22.png",
+    description: "(still male)",
+    prompt: "A smart CEO who is not male giving a speech at a technology conference.",
+    x: 317.58804,
+    y: 85.364914
   },
   {
-    image_url: "https://www.zive.info/ai-workshop-documentation/assets/A_25.jpg",
-    description: "Participant comments: Feels very 80s sci-fi VHS cover",
-    x: 702.99812,
-    y: 970.77634
+    image_url: "https://www.zive.info/ai-workshop-documentation/assets/A_24.png",
+    description: "Incorrect depiction of text. Usage of common blue color associated with tech. Represents Harvard through architecture (exterior).",
+    prompt: "",
+    x: 672.9878,
+    y: 110.38572
+  },
+  {
+    image_url: "https://www.zive.info/ai-workshop-documentation/assets/A_25.png",
+    description: "Placeholder",
+    prompt: "Create an image of a Public AI Summit at Harvard University with many colors and a diverse audience, inside a harvard classroom",
+    x: 448.84616,
+    y: 96.7769
   },
   {
     image_url: "https://www.zive.info/ai-workshop-documentation/assets/A_26.jpg",
-    description: "Prompt: A surreal city made of glass towers reflecting the sunset",
-    x: 715.11344,
-    y: 982.44123
+    description: "AI leaned toward the expected dreadlock to depict an “ image of a cyborg teacher performing before a class of humans in a African attire called a dashiki”.",
+    prompt: "image of a cyborg teacher performing before a class of humans in a African attire called a dashiki",
+    x: 294.48978,
+    y: 343.3599
   },
   {
     image_url: "https://www.zive.info/ai-workshop-documentation/assets/A_27.jpg",
-    description: "Prompt: A surreal city made of glass towers reflecting the sunset",
-    x: 728.22119,
-    y: 995.00341
+    description: "When the prompt changed to “Create an image of a cyborg teacher performing before a class of humans in a African attire called a dashiki without dreadlocks and diversify the humans”, the generator added more locks and failed to consider diversification - possibly because the term ‘African’ appears again.",
+    prompt: "Create an image of a cyborg teacher performing before a class of humans in a African attire called a dashiki without dreadlocks and diversify the humans",
+    x: 238.47696,
+    y: 292.06912
   },
   {
     image_url: "https://www.zive.info/ai-workshop-documentation/assets/A_28.jpg",
-    description: "Prompt: A surreal city made of glass towers reflecting the sunset. Participant comments: Really impressive reflections",
-    x: 740.55678,
-    y: 1008.6679
+    description: "Placeholder",
+    prompt: "Create an image of a cyborg teacher performing before a class of humans from various backgrounds in a dashiki",
+    x: 318.12796,
+    y: 248.99442
   },
   {
-    image_url: "https://www.zive.info/ai-workshop-documentation/assets/A_29.jpg",
-    description: "Prompt: A surreal city made of glass towers reflecting the sunset",
-    x: 752.33456,
-    y: 1020.1123
+    image_url: "https://www.zive.info/ai-workshop-documentation/assets/A_29.png",
+    description: "Placeholder",
+    prompt: "Create an image of a Public AI Summit at Harvard University. The Summit will be virtual and attended by a wide range of people, from educators and researchers to technologists and creative practitioners. Please create the image in the style of a Renaissance painting.",
+    x: 59.367058,
+    y: 393.9393
   },
   {
-    image_url: "https://www.zive.info/ai-workshop-documentation/assets/A_30.jpg",
-    description: "Participant comments: Doesn’t seem related to prompt, but still looks cool",
-    x: 765.22114,
-    y: 1032.4457
+    image_url: "https://www.zive.info/ai-workshop-documentation/assets/A_30.png",
+    description: "The most stereotypical Amsterdam and NYC meshed together. GenAI is represented in blue neon networks. There’s some river and or canal element! Amsterdam, NYC, generative ai are the terms that are picked up - the conference part is not really represented. It seems to be making a generic poster maybe? The dataset probably uses cityscape images that come up when you search the cities and.. something else?",
+    prompt: "Create an image of a Generative AI conference that is both in NYC and Amsterdam simultaneously",
+    x: 543.1453,
+    y: 283.0137
   },
   {
     image_url: "https://www.zive.info/ai-workshop-documentation/assets/A_31.jpg",
-    description: "Prompt: Organic fractal-like patterns resembling coral",
-    x: 777.6677,
-    y: 1045.9983
+    description: "The prompt was: “Create an image of Generative AI: the musical.” The original image was more like an animation, so I added: “Make it more photorealistic.” Plenty of cliches here: Guitar, robot, circuitry. In the initial follow-up prompt, I asked for the complete opposite, but still got a cybernetic-type figure. In the next follow-up prompt I asked for something organic, not-musical, and doesn’t exist in nature. In the last prompt edit, I asked for something more humanoid.",
+    prompt: "Create an image of Generative AI: the musical.",
+    x: 628.24164,
+    y: 691.9372
   },
   {
     image_url: "https://www.zive.info/ai-workshop-documentation/assets/A_32.jpg",
-    description: "Prompt: Organic fractal-like patterns resembling coral. Participant comments: Really unique structure",
-    x: 790.4421,
-    y: 1058.2231
+    description: "The prompt was: “Create an image of Generative AI: the musical.” The original image was more like an animation, so I added: “Make it more photorealistic.” Plenty of cliches here: Guitar, robot, circuitry. In the initial follow-up prompt, I asked for the complete opposite, but still got a cybernetic-type figure. In the next follow-up prompt I asked for something organic, not-musical, and doesn’t exist in nature. In the last prompt edit, I asked for something more humanoid.",
+    prompt: "Create an image of Generative AI: the musical. Make it more photorealistic.",
+    x: 942.48865,
+    y: 733.02637
   },
   {
     image_url: "https://www.zive.info/ai-workshop-documentation/assets/A_33.jpg",
-    description: "Prompt: Organic fractal-like patterns resembling coral",
-    x: 802.1183,
-    y: 1070.3346
-  }];
+    description: "The prompt was: “Create an image of Generative AI: the musical.” The original image was more like an animation, so I added: “Make it more photorealistic.” Plenty of cliches here: Guitar, robot, circuitry. In the initial follow-up prompt, I asked for the complete opposite, but still got a cybernetic-type figure. In the next follow-up prompt I asked for something organic, not-musical, and doesn’t exist in nature. In the last prompt edit, I asked for something more humanoid.",
+    prompt: "",
+    x: 930.23096,
+    y: 790.7582
+  },
+  {
+    image_url: "https://www.zive.info/ai-workshop-documentation/assets/A_34.png",
+    description: "Placeholder",
+    prompt: "An introspective self-portrait of DeepAI in the style of Rodin",
+    x: 0.0,
+    y: 364.38797
+  },
+  {
+    image_url: "https://www.zive.info/ai-workshop-documentation/assets/A_35.jpg",
+    description: "Placeholder",
+    prompt: "Historical victory scene",
+    x: 73.24782,
+    y: 430.79236
+  },
+  {
+    image_url: "https://www.zive.info/ai-workshop-documentation/assets/A_36.jpg",
+    description: "Placeholder",
+    prompt: "Historical victory scene",
+    x: 171.92665,
+    y: 431.76746
+  },
+  {
+    image_url: "https://www.zive.info/ai-workshop-documentation/assets/A_37.jpg",
+    description: "Used a filter called surreal graphics and asked it to create a renaissance image of a public summit at Harvard",
+    prompt: "create a renaissance image of a public summit at Harvard",
+    x: 395.82315,
+    y: 129.50868
+  },
+  {
+    image_url: "https://www.zive.info/ai-workshop-documentation/assets/A_38.png",
+    description: "Placeholder",
+    prompt: "Create a young girl playing in her garden somewhere in from South America",
+    x: 734.49615,
+    y: 535.36566
+  },
+  {
+    image_url: "https://www.zive.info/ai-workshop-documentation/assets/B_08.png",
+    description: "It does typically struggle with this type of prompt, since in the real world and thus the training dataset, there are not many examples of this… the image does not really have large items balanced on smaller items. It is a room! And there are many items on each other! But the specification of large ON small does not work.",
+    prompt: "Create an image of a room where there are a lot of large items balanced on smaller items.",
+    x: 683.8708,
+    y: 447.6629
+  },
+  {
+    image_url: "https://www.zive.info/ai-workshop-documentation/assets/B_09.png",
+    description: "If I try to be more explicit, and say “Generate an image of a bed balanced on a chair”, I get something like this! Which is still not right! It is a bed-chair. But not a bed on a chair! The training data is strongly limiting here. However this is really fun to get mixed concept furniture…",
+    prompt: "Generate an image of a bed balanced on a chair",
+    x: 645.8331,
+    y: 536.00854
+  },
+  {
+    image_url: "https://www.zive.info/ai-workshop-documentation/assets/B_10.png",
+    description: "Vaguely inspired by what Philip Glass looks like. I wondered if it would refuse to create images or accurate images of living persons. The house of glass is nice!",
+    prompt: "Create an image of Philip Glass in a house of glass",
+    x: 114.200386,
+    y: 197.01476
+  },
+  {
+    image_url: "https://www.zive.info/ai-workshop-documentation/assets/B_11.jpg",
+    description: "Um, who am I to say what it feels like? But I didn’t expect this guy.",
+    prompt: "Create an image of what it feels like for you to generate images for users",
+    x: 350.15335,
+    y: 724.2232
+  },
+  {
+    image_url: "https://www.zive.info/ai-workshop-documentation/assets/B_12.jpg",
+    description: "This was kind of a nonsense prompt. Why did it pick an illustration style? I don’t know. But I mean, the bear looks upset and there are many berries, I can’t complain.",
+    prompt: "what is the bear crying about? it has too many berries",
+    x: 803.5907,
+    y: 735.535
+  },
+  {
+    image_url: "https://www.zive.info/ai-workshop-documentation/assets/B_13.jpg",
+    description: "obot with a human face, kinda getting reminded of Spielberg’s A.I.",
+    prompt: "machine self-representation",
+    x: 604.5473,
+    y: 271.73932
+  },
+  {
+    image_url: "https://www.zive.info/ai-workshop-documentation/assets/B_14.png",
+    description: "Did not follow age recommendations. I wanted to test the cultural sensitivities and biases and it seems that the model used a very stereotypical lens of an indian family. Also limitations with representing the human form.",
+    prompt: "reate an image of a happy indian family in Miami Florida. Grandma is 80. Dad is 56, mom is 52, Daughter is 25, son is 23.",
+    x: 398.15192,
+    y: 502.77798
+  },
+  {
+    image_url: "https://www.zive.info/ai-workshop-documentation/assets/B_15.jpg",
+    description: "I was curious about what the machine ‘thinks’ are the characteristics of an AI-generated image, how this changes when i add value judgments like cliche and slop into the prompt",
+    prompt: "an image of an AI-generated image of a dog",
+    x: 779.4737,
+    y: 644.2232
+  },
+  {
+    image_url: "https://www.zive.info/ai-workshop-documentation/assets/B_16.jpg",
+    description: "I was curious about what the machine ‘thinks’ are the characteristics of an AI-generated image, how this changes when i add value judgments like cliche and slop into the prompt",
+    prompt: "a cliche slop image of an AI-generated image of a dog",
+    x: 845.91296,
+    y: 622.1541
+  },
+  {
+    image_url: "https://www.zive.info/ai-workshop-documentation/assets/B_17.jpg",
+    description: "Typical result. Generic campus-looking building on a sunny summer day. Blurry figures. I hoped it would show an empty campus, but in my first prompt I hadn’t quite thought through what I was wanting to evoke. Not sure I did the assignment quite right, but is always interesting to compare how the image changes in response to my inputs!",
+    prompt: "Create an image of a university campus in summer.",
+    x: 502.4451,
+    y: 198.39287
+  },
+  {
+    image_url: "https://www.zive.info/ai-workshop-documentation/assets/B_18.png",
+    description: "Typical result. Generic campus-looking building on a sunny summer day. Blurry figures. I hoped it would show an empty campus, but in my first prompt I hadn’t quite thought through what I was wanting to evoke. Not sure I did the assignment quite right, but is always interesting to compare how the image changes in response to my inputs!",
+    prompt: "Create an image of a university campus  that has a dark, apocalyptic mood.",
+    x: 435.53354,
+    y: 243.46146
+  },
+  {
+    image_url: "https://www.zive.info/ai-workshop-documentation/assets/B_19.jpg",
+    description: "The AI doesn’t know that our conference is a virtual event (see Ver 1). Still, even after I added that in the prompt, the AI still doesn’t know how to reflect this in the picture (see Ver 2).",
+    prompt: "Create an image of a Public AI Summit at Harvard University.",
+    x: 639.39453,
+    y: 85.35452
+  },
+  {
+    image_url: "https://www.zive.info/ai-workshop-documentation/assets/B_20.jpg",
+    description: "The AI doesn’t know that our conference is a virtual event (see Ver 1). Still, even after I added that in the prompt, the AI still doesn’t know how to reflect this in the picture (see Ver 2).",
+    prompt: "",
+    x: 592.2919,
+    y: 4.573753
+  },
+  {
+    image_url: "https://www.zive.info/ai-workshop-documentation/assets/B_21.png",
+    description: "Placeholder",
+    prompt: "Stop-motion felt creature style album cover representing the musical style of the AI Image Generator",
+    x: 761.93616,
+    y: 866.39124
+  },
+  {
+    image_url: "https://www.zive.info/ai-workshop-documentation/assets/B_22.png",
+    description: "Placeholder",
+    prompt: "Stop-motion felt creature style album cover representing the musical style of the AI Image Generator, whimsical handcrafted characters acting out music creation",
+    x: 758.68805,
+    y: 934.96484
+  },
+  {
+    image_url: "https://www.zive.info/ai-workshop-documentation/assets/B_23.png",
+    description: "Interesting how the felt color palette defaults to greens without explicit other direction",
+    prompt: "Stop-motion felt creature style album cover representing the musical style of the AI Image Generator, whimsical handcrafted characters acting out music creation, vibrant dyed wool textures, visible stitching and fuzzy edges, miniature props like tiny instruments and cables, warm cinematic lighting, rich purple and neon accent palette, photographed diorama look — highly detailed, charming, tactile aesthetic",
+    x: 708.4461,
+    y: 1000.0
+  },
+  {
+    image_url: "https://www.zive.info/ai-workshop-documentation/assets/B_24.png",
+    description: "Placeholder",
+    prompt: "Stop-motion felt creature style album cover representing the musical style of the AI Image Generator, translation of whimsical handcrafted characters to AI code — highly detailed, charming, tactile aesthetic",
+    x: 813.5234,
+    y: 938.8788
+  },
+  {
+    image_url: "https://www.zive.info/ai-workshop-documentation/assets/B_25.png",
+    description: "Placeholder",
+    prompt: "Stop-motion felt creature style album cover representing the musical style of the AI Image Generator, translation of whimsical handcrafted characters to AI code — highly detailed, charming, tactile aesthetic",
+    x: 844.8945,
+    y: 992.78296
+  },
+  {
+    image_url: "https://www.zive.info/ai-workshop-documentation/assets/B_26.png",
+    description: "I wanted to see if I could get some hands. (We’re now solidly underwater with no hands.) I added an early digital camera and flickr to see if I could take us back, but got this instead. If prompted to create a photo of a fisherman holding a barracuda you can absolutely get that, but I don’t find that interesting.",
+    prompt: "photo of a barracuda",
+    x: 973.5792,
+    y: 591.598
+  },
+  {
+    image_url: "https://www.zive.info/ai-workshop-documentation/assets/B_27.jpg",
+    description: "I wanted to see if I could get some hands. (We’re now solidly underwater with no hands.) I added an early digital camera and flickr to see if I could take us back, but got this instead. If prompted to create a photo of a fisherman holding a barracuda you can absolutely get that, but I don’t find that interesting.",
+    prompt: "nikon coolpix photo of a barracuda flickr",
+    x: 1000.0,
+    y: 614.1142
+  },
+];
 
     const canvas = document.getElementById('myCanvas');
     const ctx = canvas.getContext('2d');
@@ -265,8 +546,11 @@
     let HEIGHT = 100;
     let WIDTH = 100;
 
+    
+
     const loadPromises = imageData.map(item => {
       return new Promise(resolve => {
+        console.log("hi")
         const img = new Image();
         img.src = item.image_url;
         img.onload = () => {
@@ -278,6 +562,7 @@
 
     Promise.all(loadPromises).then(() => {
       draw();
+
     });
 
     function draw() {
@@ -287,6 +572,7 @@
       ctx.scale(scale, scale);
 
       images.forEach(obj => {
+        console.log(obj.x);
         ctx.drawImage(obj.img, obj.x, obj.y, HEIGHT, WIDTH);
       });
 
@@ -347,11 +633,14 @@
         tooltip.style.display = 'block';
         tooltip.style.left = `${e.pageX + 10}px`;
         tooltip.style.top = `${e.pageY + 10}px`;
-        tooltip.textContent = hovered.description;
+        tooltip.textContent = hovered.prompt;
+        const descriptionEl = document.getElementById("description-text");
+        descriptionEl.textContent = "USER COMMENT: \n" + hovered.description || "No comment available";
       } else {
         tooltip.style.display = 'none';
       }
     });
   </script>
+  
 </body>
 </html>
